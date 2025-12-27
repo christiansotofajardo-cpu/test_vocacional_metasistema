@@ -44,7 +44,6 @@ def riasec():
 
         ordenados = sorted(puntajes.items(), key=lambda x: x[1], reverse=True)
 
-        # Guardar en sesión
         session["riasec_puntajes"] = puntajes
         session["riasec_top"] = [ordenados[0][0], ordenados[1][0]]
 
@@ -98,6 +97,8 @@ def interpretacion():
         "Baja": "Podrías requerir mayor acompañamiento para desarrollar confianza en tus capacidades."
     }
 
+    session["perfil"] = perfil
+
     return render_template(
         "interpretacion.html",
         perfil=perfil,
@@ -106,7 +107,33 @@ def interpretacion():
     )
 
 # -------------------------
+# MetaSistema – Consignas abiertas
+# -------------------------
+@app.route("/metasistema", methods=["GET", "POST"])
+def metasistema():
+    if request.method == "POST":
+        session["meta_q1"] = request.form.get("q1")
+        session["meta_q2"] = request.form.get("q2")
+        session["meta_q3"] = request.form.get("q3")
+
+        return redirect(url_for("cierre"))
+
+    return render_template("metasistema.html")
+
+# -------------------------
+# Cierre
+# -------------------------
+@app.get("/cierre")
+def cierre():
+    return render_template(
+        "cierre.html",
+        perfil=session.get("perfil", "No disponible"),
+        nivel=session.get("autoeficacia_nivel", "No disponible")
+    )
+
+# -------------------------
 # Run
 # -------------------------
 if __name__ == "__main__":
     app.run(debug=True)
+
