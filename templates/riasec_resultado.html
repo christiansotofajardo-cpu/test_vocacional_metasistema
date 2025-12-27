@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Resultados RIASEC · Test Vocacional MetaSistema</title>
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial; margin:0; background:#0b1220; color:#e8eefc;}
+    .wrap{max-width:800px; margin:0 auto; padding:48px 20px;}
+    .card{background:#101b33; border-radius:18px; padding:28px; box-shadow:0 20px 60px rgba(0,0,0,.35);}
+    h1{margin:0 0 12px; font-size:22px;}
+    table{width:100%; border-collapse:collapse; margin-top:16px;}
+    th, td{padding:10px; border-bottom:1px solid #22345f; text-align:left;}
+    th{color:#cfe0ff;}
+    .top{font-weight:700; color:#ffffff;}
+    a{display:inline-block; margin-top:18px; color:#cfe0ff; text-decoration:none; font-weight:600}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>Resultados RIASEC</h1>
+      <p>Puntajes obtenidos en cada dimensión de intereses vocacionales.</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Dimensión</th>
+            <th>Puntaje</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for letra, valor in ordenados %}
+          <tr class="{% if loop.index <= 2 %}top{% endif %}">
+            <td>{{ letra }}</td>
+            <td>{{ valor }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <p>
+        Perfil dominante:
+        <strong>{{ ordenados[0][0] }}</strong> –
+        <strong>{{ ordenados[1][0] }}</strong>
+      </p>
+
+      <a href="/">Volver al inicio</a>
+    </div>
+  </div>
+</body>
+</html>
