@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Autoeficacia · Test Vocacional MetaSistema</title>
+  <style>
+    body{font-family:system-ui; margin:0; background:#0b1220; color:#e8eefc;}
+    .wrap{max-width:900px; margin:auto; padding:48px 20px;}
+    .card{background:#101b33; border-radius:18px; padding:28px;}
+    h1{font-size:22px;}
+    .item{margin-bottom:14px;}
+    label{display:block; margin-bottom:6px;}
+    select{width:100%; padding:10px; border-radius:10px;
+      background:#0f1a33; color:#e8eefc; border:1px solid #22345f;}
+    button{margin-top:20px; padding:12px 16px; border-radius:12px;
+      background:#1b2e5e; color:#fff; border:0;}
+  </style>
+</head>
+<body>
+<div class="wrap">
+<div class="card">
+<h1>Escala de Autoeficacia</h1>
+<p>Indica cuánto estás de acuerdo con cada afirmación.</p>
+
+<form method="post" action="/test/autoeficacia">
+
+{% for i in range(1,16) %}
+<div class="item">
+  <label>{{i}}. Confío en mi capacidad para enfrentar nuevos desafíos.</label>
+  <select name="AE{{i}}" required>
+    <option value="">Selecciona…</option>
+    <option value="1">Nada</option>
+    <option value="2">Poco</option>
+    <option value="3">Algo</option>
+    <option value="4">Mucho</option>
+  </select>
+</div>
+{% endfor %}
+
+<button type="submit">Ver resultados</button>
+</form>
+</div>
+</div>
+</body>
+</html>
