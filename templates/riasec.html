@@ -9,14 +9,15 @@
     .wrap{max-width:900px; margin:0 auto; padding:48px 20px;}
     .card{background:#101b33; border-radius:18px; padding:28px; box-shadow:0 20px 60px rgba(0,0,0,.35);}
     h1{margin:0 0 10px; font-size:22px;}
-    p{margin:0 0 16px; color:#9fb0d0; line-height:1.5}
-    .item{margin-bottom:18px;}
-    label{display:block; margin-bottom:6px; color:#cfe0ff;}
+    h2{margin:26px 0 10px; font-size:18px; color:#cfe0ff;}
+    p{margin:0 0 14px; color:#9fb0d0; line-height:1.5}
+    .item{margin-bottom:14px;}
+    label{display:block; margin-bottom:6px; color:#e8eefc;}
     select{
       width:100%; padding:10px; border-radius:10px;
       border:1px solid #22345f; background:#0f1a33; color:#e8eefc;
     }
-    .actions{margin-top:20px;}
+    .actions{margin-top:26px;}
     button{
       padding:12px 16px; border-radius:12px; border:0;
       background:#1b2e5e; color:#e8eefc; font-weight:600; cursor:pointer;
@@ -27,23 +28,16 @@
   <div class="wrap">
     <div class="card">
       <h1>Inventario de Intereses Vocacionales (RIASEC)</h1>
-      <p>Indica cuánto te interesa cada actividad.</p>
+      <p>Indica cuánto te interesa realizar cada una de las siguientes actividades.</p>
 
       <form method="post" action="/test/riasec">
-        <div class="item">
-          <label>1. Reparar o construir objetos con herramientas</label>
-          <select name="q1" required>
-            <option value="">Selecciona…</option>
-            <option value="1">Nada</option>
-            <option value="2">Poco</option>
-            <option value="3">Algo</option>
-            <option value="4">Mucho</option>
-          </select>
-        </div>
 
+        <!-- REALISTA -->
+        <h2>R · Realista</h2>
+        {% for i in range(1,11) %}
         <div class="item">
-          <label>2. Ayudar a otras personas a resolver problemas</label>
-          <select name="q2" required>
+          <label>R{{i}}. Trabajar con herramientas, máquinas o materiales físicos</label>
+          <select name="R{{i}}" required>
             <option value="">Selecciona…</option>
             <option value="1">Nada</option>
             <option value="2">Poco</option>
@@ -51,12 +45,90 @@
             <option value="4">Mucho</option>
           </select>
         </div>
+        {% endfor %}
+
+        <!-- INVESTIGATIVO -->
+        <h2>I · Investigativo</h2>
+        {% for i in range(1,11) %}
+        <div class="item">
+          <label>I{{i}}. Analizar problemas y buscar explicaciones o soluciones</label>
+          <select name="I{{i}}" required>
+            <option value="">Selecciona…</option>
+            <option value="1">Nada</option>
+            <option value="2">Poco</option>
+            <option value="3">Algo</option>
+            <option value="4">Mucho</option>
+          </select>
+        </div>
+        {% endfor %}
+
+        <!-- ARTÍSTICO -->
+        <h2>A · Artístico</h2>
+        {% for i in range(1,11) %}
+        <div class="item">
+          <label>A{{i}}. Expresar ideas o emociones de manera creativa</label>
+          <select name="A{{i}}" required>
+            <option value="">Selecciona…</option>
+            <option value="1">Nada</option>
+            <option value="2">Poco</option>
+            <option value="3">Algo</option>
+            <option value="4">Mucho</option>
+          </select>
+        </div>
+        {% endfor %}
+
+        <!-- SOCIAL -->
+        <h2>S · Social</h2>
+        {% for i in range(1,11) %}
+        <div class="item">
+          <label>S{{i}}. Ayudar, orientar o enseñar a otras personas</label>
+          <select name="S{{i}}" required>
+            <option value="">Selecciona…</option>
+            <option value="1">Nada</option>
+            <option value="2">Poco</option>
+            <option value="3">Algo</option>
+            <option value="4">Mucho</option>
+          </select>
+        </div>
+        {% endfor %}
+
+        <!-- EMPRENDEDOR -->
+        <h2>E · Emprendedor</h2>
+        {% for i in range(1,11) %}
+        <div class="item">
+          <label>E{{i}}. Liderar, persuadir o tomar decisiones</label>
+          <select name="E{{i}}" required>
+            <option value="">Selecciona…</option>
+            <option value="1">Nada</option>
+            <option value="2">Poco</option>
+            <option value="3">Algo</option>
+            <option value="4">Mucho</option>
+          </select>
+        </div>
+        {% endfor %}
+
+        <!-- CONVENCIONAL -->
+        <h2>C · Convencional</h2>
+        {% for i in range(1,11) %}
+        <div class="item">
+          <label>C{{i}}. Organizar información, seguir procedimientos</label>
+          <select name="C{{i}}" required>
+            <option value="">Selecciona…</option>
+            <option value="1">Nada</option>
+            <option value="2">Poco</option>
+            <option value="3">Algo</option>
+            <option value="4">Mucho</option>
+          </select>
+        </div>
+        {% endfor %}
 
         <div class="actions">
           <button type="submit">Continuar</button>
         </div>
+
       </form>
     </div>
   </div>
 </body>
 </html>
+
