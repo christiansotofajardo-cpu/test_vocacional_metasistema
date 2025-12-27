@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Panel Institucional · MetaSistema</title>
+  <style>
+    body{font-family:system-ui; background:#0b1220; color:#e8eefc; margin:0;}
+    .wrap{max-width:1100px; margin:auto; padding:44px 18px;}
+    .card{background:#101b33; border-radius:18px; padding:22px; box-shadow:0 20px 60px rgba(0,0,0,.35);}
+    h1{margin:0 0 8px; font-size:22px;}
+    p{margin:0 0 14px; color:#9fb0d0; line-height:1.5;}
+    .grid{display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-top:12px;}
+    .box{background:#0f1a33; border:1px solid #22345f; border-radius:14px; padding:12px;}
+    .k{color:#cfe0ff; font-weight:800; font-size:12px; text-transform:uppercase; letter-spacing:.06em;}
+    .v{margin-top:6px; color:#e8eefc; font-size:18px; font-weight:800;}
+    form{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;}
+    select,input{padding:10px; border-radius:12px; border:1px solid #22345f; background:#0f1a33; color:#e8eefc;}
+    .btn{padding:10px 12px; border-radius:12px; text-decoration:none; font-weight:800; border:0; cursor:pointer;}
+    .primary{background:#1b2e5e; color:#e8eefc;}
+    .secondary{background:#15254a; color:#cfe0ff;}
+    table{width:100%; border-collapse:collapse; margin-top:16px; font-size:14px;}
+    th,td{padding:10px; border-bottom:1px solid #22345f; text-align:left; vertical-align:top;}
+    th{color:#cfe0ff; font-size:12px; text-transform:uppercase; letter-spacing:.06em;}
+    .muted{color:#9fb0d0;}
+    .chips{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;}
+    .chip{background:#0f1a33; border:1px solid #22345f; border-radius:999px; padding:8px 10px; font-size:12px; color:#cfe0ff;}
+    .top{font-weight:900; color:#ffffff;}
+    .row2{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px;}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <h1>Panel Institucional</h1>
+    <p>Resumen operativo de evaluaciones completadas (modo demo sin base de datos persistente).</p>
+
+    <div class="grid">
+      <div class="box">
+        <div class="k">Evaluaciones</div>
+        <div class="v">{{ total }}</div>
+      </div>
+      <div class="box">
+        <div class="k">Autoeficacia promedio</div>
+        <div class="v">{{ auto_prom }}</div>
+      </div>
+      <div class="box">
+        <div class="k">Exportación</div>
+        <div class="v" style="font-size:14px; font-weight:700;">
+          CSV disponible
+        </div>
+      </div>
+    </div>
+
+    <div class="row2">
+      <div class="box">
+        <div class="k">Top perfiles (frecuencia)</div>
+        <div class="chips">
+          {% if top_perfil_counts %}
+            {% for p,c in top_perfil_counts %}
+              <div class="chip"><span class="top">{{ p }}</span> · {{ c }}</div>
+            {% endfor %}
+          {% else %}
+            <div class="muted">Aún no hay datos.</div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="box">
+        <div class="k">Filtros</div>
+        <form method="get" action="/admin">
+          {% if admin_key %}
+            <input type="hidden" name="key" value="{{ admin_key }}"/>
+          {% endif %}
+
+          <select name="establecimiento">
+            <option value="">Establecimiento (todos)</option>
+            {% for e in establecimientos %}
+              <option value="{{ e }}" {% if filtro_est == e|lower %}selected{% endif %}>{{ e }}</option>
+            {% endfor %}
+          </select>
+
+          <select name="curso">
+            <option value="">Curso (todos)</option>
+            {% for c in cursos %}
+              <option value="{{ c }}" {% if filtro_curso == c|lower %}selected{% endif %}>{{ c }}</option>
+            {% endfor %}
+          </select>
+
+          <button class="btn primary" type="submit">Aplicar</button>
+
+          <a class="btn secondary"
+             href="/admin.csv{% if admin_key or filtro_est or filtro_curso %}?{% endif %}{% if admin_key %}key={{ admin_key }}{% endif %}{% if filtro_est %}{% if admin_key %}&{% endif %}establecimiento={{ filtro_est }}{% endif %}{% if filtro_curso %}{% if admin_key or filtro_est %}&{% endif %}curso={{ filtro_curso }}{% endif %}">
+             Descargar CSV
+          </a>
+        </form>
+
+        <p class="muted" style="margin-top:10px;">
+          Tip: si defines <span class="chip">ADMIN_KEY</span> en Render, debes entrar con <span class="chip">/admin?key=TUCLAVE</span>.
+        </p>
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Establecimiento</th>
+          <th>Curso</th>
+          <th>Estudiante</th>
+          <th>Perfil</th>
+          <th>Autoeficacia</th>
+          <th>RIASEC</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if rows %}
+          {% for r in rows %}
+          <tr>
+            <td class="muted">{{ r["fecha_fin"] }}</td>
+            <td>{{ r["establecimiento"] }}</td>
+            <td>{{ r["curso"] }}</td>
+            <td>{{ r["nombre"] }} {{ r["apellido"] }}</td>
+            <td class="top">{{ r["perfil"] }}</td>
+            <td>{{ r["autoeficacia_nivel"] }} <span class="muted">(Total {{ r["autoeficacia_total"] }})</span></td>
+            <td class="muted">
+              R {{ r["R"] }} · I {{ r["I"] }} · A {{ r["A"] }} · S {{ r["S"] }} · E {{ r["E"] }} · C {{ r["C"] }}
+            </td>
+          </tr>
+          {% endfor %}
+        {% else %}
+          <tr><td colspan="7" class="muted">Sin evaluaciones registradas en este filtro.</td></tr>
+        {% endif %}
+      </tbody>
+    </table>
+
+    <div style="margin-top:16px;">
+      <a class="btn secondary" href="/">Volver al inicio</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>
