@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Reflexión Vocacional · MetaSistema</title>
+  <style>
+    body{font-family:system-ui; background:#0b1220; color:#e8eefc;}
+    .wrap{max-width:900px; margin:auto; padding:48px;}
+    .card{background:#101b33; border-radius:18px; padding:28px;}
+    textarea{width:100%; min-height:90px; margin-top:6px;
+      background:#0f1a33; color:#e8eefc; border:1px solid #22345f;
+      border-radius:12px; padding:12px;}
+    button{margin-top:20px; padding:12px 16px; border-radius:12px;
+      background:#1b2e5e; color:#fff; border:0;}
+    label{display:block; margin-top:18px;}
+  </style>
+</head>
+<body>
+<div class="wrap">
+<div class="card">
+<h1>Reflexión personal</h1>
+<p>Estas preguntas buscan conocer tu forma de pensar y proyectarte. No tienen respuestas correctas o incorrectas.</p>
+
+<form method="post" action="/metasistema">
+
+<label>1. ¿Qué tipo de actividades o situaciones te hacen sentir más motivado/a?</label>
+<textarea name="q1" required></textarea>
+
+<label>2. ¿Qué habilidades personales crees que serán importantes para tu futuro?</label>
+<textarea name="q2" required></textarea>
+
+<label>3. ¿Qué te gustaría estar haciendo o aportando en algunos años más?</label>
+<textarea name="q3" required></textarea>
+
+<button type="submit">Finalizar</button>
+</form>
+
+</div>
+</div>
+</body>
+</html>
