@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Informe Vocacional · MetaSistema</title>
+  <style>
+    body{font-family:system-ui; background:#0b1220; color:#e8eefc; margin:0;}
+    .wrap{max-width:900px; margin:auto; padding:48px 20px;}
+    .card{background:#101b33; border-radius:18px; padding:28px; box-shadow:0 20px 60px rgba(0,0,0,.35);}
+    h1{font-size:24px; margin:0 0 10px;}
+    h2{font-size:16px; margin:22px 0 10px; color:#cfe0ff;}
+    p{color:#9fb0d0; line-height:1.55; margin:0 0 12px;}
+    .grid{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:10px;}
+    .box{background:#0f1a33; border:1px solid #22345f; border-radius:14px; padding:14px;}
+    .k{color:#cfe0ff; font-weight:700; font-size:12px; text-transform:uppercase; letter-spacing:.06em;}
+    .v{margin-top:6px; color:#e8eefc;}
+    table{width:100%; border-collapse:collapse; margin-top:10px;}
+    th,td{padding:10px; border-bottom:1px solid #22345f; text-align:left;}
+    th{color:#cfe0ff;}
+    .btns{display:flex; gap:12px; margin-top:18px; flex-wrap:wrap;}
+    a.btn{display:inline-block; padding:12px 14px; border-radius:12px; text-decoration:none; font-weight:700;}
+    a.primary{background:#1b2e5e; color:#e8eefc;}
+    a.secondary{background:#15254a; color:#cfe0ff;}
+    .mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;}
+    .ans{white-space:pre-wrap; background:#0f1a33; border:1px solid #22345f; border-radius:14px; padding:14px; color:#e8eefc;}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <h1>Informe Vocacional MetaSistema</h1>
+    <p class="mono">Generado: {{ fin if fin else "—" }} · Inicio: {{ inicio if inicio else "—" }}</p>
+
+    <h2>Identificación</h2>
+    <div class="grid">
+      <div class="box"><div class="k">Nombre</div><div class="v">{{ nombre }} {{ apellido }}</div></div>
+      <div class="box"><div class="k">Curso / Nivel</div><div class="v">{{ curso }}</div></div>
+      <div class="box"><div class="k">Establecimiento</div><div class="v">{{ establecimiento }}</div></div>
+      <div class="box"><div class="k">Correo (opcional)</div><div class="v">{{ correo if correo else "—" }}</div></div>
+    </div>
+
+    <h2>Resultados cuantitativos</h2>
+    <div class="grid">
+      <div class="box"><div class="k">Perfil RIASEC predominante</div><div class="v" style="font-size:18px;font-weight:800;">{{ perfil }}</div></div>
+      <div class="box"><div class="k">Autoeficacia</div><div class="v" style="font-size:18px;font-weight:800;">{{ auto_nivel }} <span style="font-weight:600;color:#9fb0d0;">(Total: {{ auto_total }})</span></div></div>
+    </div>
+
+    <table>
+      <thead>
+        <tr><th>Dimensión</th><th>Puntaje (10–40)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>R · Realista</td><td>{{ puntajes["R"] }}</td></tr>
+        <tr><td>I · Investigativo</td><td>{{ puntajes["I"] }}</td></tr>
+        <tr><td>A · Artístico</td><td>{{ puntajes["A"] }}</td></tr>
+        <tr><td>S · Social</td><td>{{ puntajes["S"] }}</td></tr>
+        <tr><td>E · Emprendedor</td><td>{{ puntajes["E"] }}</td></tr>
+        <tr><td>C · Convencional</td><td>{{ puntajes["C"] }}</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Módulo MetaSistema</h2>
+    <p>Estas respuestas no se puntúan. Se incorporan como insumo para reflexión vocacional y conversación orientadora.</p>
+
+    <div class="box">
+      <div class="k">1) Motivación personal</div>
+      <div class="ans">{{ q1 if q1 else "(sin respuesta)" }}</div>
+    </div>
+    <div style="height:10px"></div>
+    <div class="box">
+      <div class="k">2) Habilidades importantes</div>
+      <div class="ans">{{ q2 if q2 else "(sin respuesta)" }}</div>
+    </div>
+    <div style="height:10px"></div>
+    <div class="box">
+      <div class="k">3) Proyección futura</div>
+      <div class="ans">{{ q3 if q3 else "(sin respuesta)" }}</div>
+    </div>
+
+    <h2>Nota ética</h2>
+    <p>
+      Este informe entrega orientación formativa basada en intereses (RIASEC), autoeficacia y reflexión personal.
+      No constituye un diagnóstico ni una recomendación cerrada de carrera. Su propósito es apoyar la conversación vocacional
+      y la toma de decisiones informada.
+    </p>
+
+    <div class="btns">
+      <a class="btn primary" href="/informe.pdf">Descargar PDF</a>
+      <a class="btn secondary" href="/cierre">Volver</a>
+      <a class="btn secondary" href="/">Inicio</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>
