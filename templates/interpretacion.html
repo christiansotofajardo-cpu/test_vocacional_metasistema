@@ -5,31 +5,36 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Resultado Vocacional · MetaSistema</title>
   <style>
-    body{font-family:system-ui; background:#0b1220; color:#e8eefc;}
-    .wrap{max-width:800px; margin:auto; padding:48px;}
-    .card{background:#101b33; border-radius:18px; padding:28px;}
-    h1{font-size:22px;}
-    p{color:#9fb0d0; line-height:1.5;}
+    body{font-family:system-ui; background:#0b1220; color:#e8eefc; margin:0;}
+    .wrap{max-width:800px; margin:auto; padding:48px 20px;}
+    .card{background:#101b33; border-radius:18px; padding:28px; box-shadow:0 20px 60px rgba(0,0,0,.35);}
+    h1{font-size:22px; margin:0 0 12px;}
+    p{color:#9fb0d0; line-height:1.5; margin:0 0 14px;}
+    .btns{display:flex; gap:12px; margin-top:18px; flex-wrap:wrap;}
+    a.btn{display:inline-block; padding:12px 14px; border-radius:12px; text-decoration:none; font-weight:700;}
+    a.primary{background:#1b2e5e; color:#e8eefc;}
+    a.secondary{background:#15254a; color:#cfe0ff;}
   </style>
 </head>
 <body>
 <div class="wrap">
-<div class="card">
-<h1>Resultado Integrado</h1>
+  <div class="card">
+    <h1>Resultado Integrado</h1>
 
-<p><strong>Perfil vocacional predominante:</strong> {{ perfil }}</p>
-<p><strong>Nivel de autoeficacia percibida:</strong> {{ nivel }}</p>
+    <p><strong>Perfil vocacional predominante:</strong> {{ perfil }}</p>
+    <p><strong>Nivel de autoeficacia percibida:</strong> {{ nivel }}</p>
+    <p>{{ texto }}</p>
 
-<p>{{ texto }}</p>
+    <p>
+      Este resultado integra intereses y autoeficacia. No constituye un diagnóstico ni una recomendación cerrada,
+      sino una orientación para apoyar procesos de reflexión y toma de decisiones.
+    </p>
 
-<p>
-Este resultado integra tus intereses vocacionales y tu percepción de capacidad personal.
-No constituye un diagnóstico ni una recomendación cerrada de carrera, sino una orientación
-para apoyar procesos de reflexión y toma de decisiones.
-</p>
-
-<a href="/">Volver al inicio</a>
-</div>
+    <div class="btns">
+      <a class="btn primary" href="/metasistema">Continuar a reflexión (MetaSistema)</a>
+      <a class="btn secondary" href="/">Volver al inicio</a>
+    </div>
+  </div>
 </div>
 </body>
 </html>
