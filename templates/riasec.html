@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>RIASEC · Test Vocacional MetaSistema</title>
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial; margin:0; background:#0b1220; color:#e8eefc;}
+    .wrap{max-width:900px; margin:0 auto; padding:48px 20px;}
+    .card{background:#101b33; border-radius:18px; padding:28px; box-shadow:0 20px 60px rgba(0,0,0,.35);}
+    h1{margin:0 0 10px; font-size:22px;}
+    p{margin:0 0 16px; color:#9fb0d0; line-height:1.5}
+    .item{margin-bottom:18px;}
+    label{display:block; margin-bottom:6px; color:#cfe0ff;}
+    select{
+      width:100%; padding:10px; border-radius:10px;
+      border:1px solid #22345f; background:#0f1a33; color:#e8eefc;
+    }
+    .actions{margin-top:20px;}
+    button{
+      padding:12px 16px; border-radius:12px; border:0;
+      background:#1b2e5e; color:#e8eefc; font-weight:600; cursor:pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>Inventario de Intereses Vocacionales (RIASEC)</h1>
+      <p>Indica cuánto te interesa cada actividad.</p>
+
+      <form method="post" action="/test/riasec">
+        <div class="item">
+          <label>1. Reparar o construir objetos con herramientas</label>
+          <select name="q1" required>
+            <option value="">Selecciona…</option>
+            <option value="1">Nada</option>
+            <option value="2">Poco</option>
+            <option value="3">Algo</option>
+            <option value="4">Mucho</option>
+          </select>
+        </div>
+
+        <div class="item">
+          <label>2. Ayudar a otras personas a resolver problemas</label>
+          <select name="q2" required>
+            <option value="">Selecciona…</option>
+            <option value="1">Nada</option>
+            <option value="2">Poco</option>
+            <option value="3">Algo</option>
+            <option value="4">Mucho</option>
+          </select>
+        </div>
+
+        <div class="actions">
+          <button type="submit">Continuar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
