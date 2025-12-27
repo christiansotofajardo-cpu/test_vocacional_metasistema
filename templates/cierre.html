@@ -2,33 +2,39 @@
 <html lang="es">
 <head>
   <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Cierre · Test Vocacional MetaSistema</title>
   <style>
-    body{font-family:system-ui; background:#0b1220; color:#e8eefc;}
-    .wrap{max-width:800px; margin:auto; padding:48px;}
-    .card{background:#101b33; border-radius:18px; padding:28px;}
+    body{font-family:system-ui; background:#0b1220; color:#e8eefc; margin:0;}
+    .wrap{max-width:800px; margin:auto; padding:48px 20px;}
+    .card{background:#101b33; border-radius:18px; padding:28px; box-shadow:0 20px 60px rgba(0,0,0,.35);}
+    h1{font-size:22px; margin:0 0 12px;}
+    p{color:#9fb0d0; line-height:1.5; margin:0 0 14px;}
+    .btns{display:flex; gap:12px; margin-top:18px; flex-wrap:wrap;}
+    a.btn{display:inline-block; padding:12px 14px; border-radius:12px; text-decoration:none; font-weight:700;}
+    a.primary{background:#1b2e5e; color:#e8eefc;}
+    a.secondary{background:#15254a; color:#cfe0ff;}
   </style>
 </head>
 <body>
 <div class="wrap">
-<div class="card">
-<h1>Proceso finalizado</h1>
+  <div class="card">
+    <h1>Proceso finalizado</h1>
 
-<p><strong>Perfil vocacional:</strong> {{ perfil }}</p>
-<p><strong>Nivel de autoeficacia:</strong> {{ nivel }}</p>
+    <p><strong>Perfil vocacional:</strong> {{ perfil }}</p>
+    <p><strong>Nivel de autoeficacia:</strong> {{ nivel }}</p>
 
-<p>
-Has completado el proceso de orientación vocacional.
-Tus respuestas permiten integrar intereses, percepción de capacidades
-y reflexiones personales para apoyar tu proceso de decisión.
-</p>
+    <p>
+      Has completado el proceso de orientación vocacional. Tus respuestas integran intereses, autoeficacia y reflexión personal
+      para apoyar tu conversación vocacional.
+    </p>
 
-<p>
-Este resultado no define tu futuro, pero puede ayudarte a pensarlo con mayor claridad.
-</p>
-
-<a href="/">Volver al inicio</a>
-</div>
+    <div class="btns">
+      <a class="btn primary" href="/informe">Ver informe (HTML)</a>
+      <a class="btn secondary" href="/informe.pdf">Descargar PDF</a>
+      <a class="btn secondary" href="/">Volver al inicio</a>
+    </div>
+  </div>
 </div>
 </body>
 </html>
