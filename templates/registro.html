@@ -1,1 +1,86 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Registro · Test Vocacional MetaSistema</title>
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial; margin:0; background:#0b1220; color:#e8eefc;}
+    .wrap{max-width:900px; margin:0 auto; padding:48px 20px;}
+    .card{background:#101b33; border-radius:18px; padding:28px; box-shadow:0 20px 60px rgba(0,0,0,.35);}
+    h1{margin:0 0 10px; font-size:22px;}
+    p{margin:0 0 16px; color:#9fb0d0; line-height:1.5}
+    label{display:block; margin:14px 0 6px; color:#cfe0ff; font-size:14px}
+    input, select, textarea{
+      width:100%; padding:12px 12px; border-radius:12px;
+      border:1px solid #22345f; background:#0f1a33; color:#e8eefc;
+      outline:none;
+    }
+    .row{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+    .small{font-size:12px; color:#9fb0d0}
+    .actions{display:flex; gap:12px; margin-top:18px;}
+    .btn{
+      display:inline-block; padding:12px 14px; border-radius:12px; border:0;
+      background:#1b2e5e; color:#e8eefc; cursor:pointer; font-weight:600;
+    }
+    .btn.secondary{background:#15254a;}
+    .check{display:flex; gap:10px; align-items:flex-start; margin-top:16px;}
+    .check input{width:auto; margin-top:4px;}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>Registro</h1>
+      <p>Ingresa tus datos para generar tu informe individual y permitir reportes por establecimiento y curso.</p>
 
+      <form method="post" action="/registro">
+        <div class="row">
+          <div>
+            <label>Nombre</label>
+            <input name="nombre" required />
+          </div>
+          <div>
+            <label>Apellido</label>
+            <input name="apellido" required />
+          </div>
+        </div>
+
+        <label>Correo electrónico (opcional)</label>
+        <input name="correo" type="email" placeholder="nombre@correo.com" />
+
+        <div class="row">
+          <div>
+            <label>Establecimiento</label>
+            <input name="establecimiento" placeholder="Colegio / Liceo" required />
+          </div>
+          <div>
+            <label>Curso / Nivel</label>
+            <select name="curso" required>
+              <option value="">Selecciona…</option>
+              <option>1° medio</option>
+              <option>2° medio</option>
+              <option>3° medio</option>
+              <option>4° medio</option>
+              <option>Otro</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="check">
+          <input id="consent" name="consent" type="checkbox" required />
+          <label for="consent" class="small">
+            Declaro que participo voluntariamente en esta evaluación de orientación vocacional y autorizo el uso de mis respuestas
+            con fines exclusivamente educativos y de orientación, conforme a normativa de protección de datos vigente.
+          </label>
+        </div>
+
+        <div class="actions">
+          <button class="btn" type="submit">Continuar</button>
+          <a class="btn secondary" href="/">Volver</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
