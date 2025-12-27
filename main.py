@@ -1,6 +1,7 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 
 app = Flask(__name__)
+app.secret_key = "metasistema-vocacional"
 
 # -------------------------
 # Home
@@ -31,7 +32,6 @@ def registro():
 def riasec():
     if request.method == "POST":
         respuestas = request.form
-
         puntajes = {"R": 0, "I": 0, "A": 0, "S": 0, "E": 0, "C": 0}
 
         for clave, valor in respuestas.items():
@@ -44,11 +44,11 @@ def riasec():
 
         ordenados = sorted(puntajes.items(), key=lambda x: x[1], reverse=True)
 
-        return render_template(
-            "riasec_resultado.html",
-            puntajes=puntajes,
-            ordenados=ordenados
-        )
+        # Guardar en sesión
+        session["riasec_puntajes"] = puntajes
+        session["riasec_top"] = [ordenados[0][0], ordenados[1][0]]
+
+        return redirect(url_for("autoeficacia"))
 
     return render_template("riasec.html")
 
@@ -59,7 +59,7 @@ def riasec():
 def autoeficacia():
     if request.method == "POST":
         total = 0
-        for clave, valor in request.form.items():
+        for valor in request.form.values():
             try:
                 total += int(valor)
             except ValueError:
@@ -72,13 +72,38 @@ def autoeficacia():
         else:
             nivel = "Alta"
 
-        return render_template(
-            "autoeficacia_resultado.html",
-            total=total,
-            nivel=nivel
-        )
+        session["autoeficacia_total"] = total
+        session["autoeficacia_nivel"] = nivel
+
+        return redirect(url_for("interpretacion"))
 
     return render_template("autoeficacia.html")
+
+# -------------------------
+# Interpretación Integrada
+# -------------------------
+@app.get("/resultado")
+def interpretacion():
+    top = session.get("riasec_top", [])
+    nivel = session.get("autoeficacia_nivel", "No disponible")
+
+    if len(top) < 2:
+        return redirect(url_for("home"))
+
+    perfil = f"{top[0]}–{top[1]}"
+
+    interpretaciones = {
+        "Alta": "Presentas una percepción sólida de tu capacidad para enfrentar desafíos y llevar a cabo tus intereses.",
+        "Media": "Percibes capacidades adecuadas, aunque puedes beneficiarte de apoyo y experiencias de fortalecimiento.",
+        "Baja": "Podrías requerir mayor acompañamiento para desarrollar confianza en tus capacidades."
+    }
+
+    return render_template(
+        "interpretacion.html",
+        perfil=perfil,
+        nivel=nivel,
+        texto=interpretaciones.get(nivel, "")
+    )
 
 # -------------------------
 # Run
