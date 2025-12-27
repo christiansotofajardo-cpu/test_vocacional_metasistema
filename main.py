@@ -15,22 +15,14 @@ def home():
 @app.route("/registro", methods=["GET", "POST"])
 def registro():
     if request.method == "POST":
-        nombre = request.form.get("nombre")
-        apellido = request.form.get("apellido")
-        correo = request.form.get("correo")
-        establecimiento = request.form.get("establecimiento")
-        curso = request.form.get("curso")
         consent = request.form.get("consent")
 
-        # Validación mínima
         if not consent:
             return render_template(
                 "registro.html",
                 error="Debes aceptar el consentimiento informado para continuar."
             )
 
-        # En esta versión NO guardamos datos
-        # Solo avanzamos en el flujo
         return redirect(url_for("riasec"))
 
     return render_template("registro.html")
@@ -41,31 +33,41 @@ def registro():
 @app.route("/test/riasec", methods=["GET", "POST"])
 def riasec():
     if request.method == "POST":
-        # Leer respuestas RIASEC (por ahora sin persistencia)
-        respuestas = dict(request.form)
+        respuestas = request.form
 
-        # Placeholder de cierre de módulo
+        # Inicializar puntajes
+        puntajes = {
+            "R": 0,
+            "I": 0,
+            "A": 0,
+            "S": 0,
+            "E": 0,
+            "C": 0
+        }
+
+        # Sumar respuestas por letra
+        for clave, valor in respuestas.items():
+            letra = clave[0]  # R1 -> R
+            if letra in puntajes:
+                try:
+                    puntajes[letra] += int(valor)
+                except ValueError:
+                    pass
+
+        # Ordenar de mayor a menor
+        ordenados = sorted(
+            puntajes.items(),
+            key=lambda x: x[1],
+            reverse=True
+        )
+
         return render_template(
-            "mensaje.html",
-            titulo="RIASEC completado",
-            mensaje=(
-                "Has respondido correctamente el Inventario de Intereses Vocacionales. "
-                "En la siguiente etapa se incorporará el módulo de Autoeficacia."
-            )
+            "riasec_resultado.html",
+            puntajes=puntajes,
+            ordenados=ordenados
         )
 
     return render_template("riasec.html")
-
-# -------------------------
-# Página genérica de mensaje
-# -------------------------
-@app.get("/mensaje")
-def mensaje():
-    return render_template(
-        "mensaje.html",
-        titulo="Proceso en curso",
-        mensaje="Este es un mensaje de sistema."
-    )
 
 # -------------------------
 # Run
