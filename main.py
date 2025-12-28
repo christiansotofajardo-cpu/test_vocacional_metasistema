@@ -30,7 +30,6 @@ def init_db():
     conn.commit()
     conn.close()
 
-
 init_db()
 
 
@@ -59,32 +58,24 @@ def registro():
 
 
 # --------------------------------------------------
-# RIASEC
+# RIASEC (ruta original + alias)
 # --------------------------------------------------
 @app.route("/riasec", methods=["GET", "POST"])
+@app.route("/test/riasec", methods=["GET", "POST"])
 def riasec():
     if request.method == "POST":
         return redirect(url_for(
             "riasec_resultado",
-            nombre=request.form.get("nombre"),
-            apellido=request.form.get("apellido"),
-            establecimiento=request.form.get("establecimiento"),
-            curso=request.form.get("curso")
+            **request.form
         ))
 
-    return render_template(
-        "riasec.html",
-        nombre=request.args.get("nombre"),
-        apellido=request.args.get("apellido"),
-        establecimiento=request.args.get("establecimiento"),
-        curso=request.args.get("curso")
-    )
+    return render_template("riasec.html", **request.args)
 
 
 @app.route("/riasec_resultado", methods=["GET", "POST"])
+@app.route("/test/riasec_resultado", methods=["GET", "POST"])
 def riasec_resultado():
     perfil_riasec = "Realista – Investigativo"
-
     return render_template(
         "riasec_resultado.html",
         perfil_riasec=perfil_riasec,
@@ -93,9 +84,10 @@ def riasec_resultado():
 
 
 # --------------------------------------------------
-# AUTOEFICACIA
+# AUTOEFICACIA (ruta original + alias)
 # --------------------------------------------------
 @app.route("/autoefficacia", methods=["GET", "POST"])
+@app.route("/test/autoefficacia", methods=["GET", "POST"])
 def autoefficacia():
     if request.method == "POST":
         return redirect(url_for(
@@ -107,9 +99,9 @@ def autoefficacia():
 
 
 @app.route("/autoefficacia_resultado", methods=["GET", "POST"])
+@app.route("/test/autoefficacia_resultado", methods=["GET", "POST"])
 def autoefficacia_resultado():
     autoeficacia = 27
-
     return render_template(
         "autoefficacia_resultado.html",
         autoeficacia=autoeficacia,
@@ -118,9 +110,10 @@ def autoefficacia_resultado():
 
 
 # --------------------------------------------------
-# METASISTEMA
+# METASISTEMA (ruta original + alias)
 # --------------------------------------------------
 @app.route("/metasistema", methods=["GET", "POST"])
+@app.route("/test/metasistema", methods=["GET", "POST"])
 def metasistema():
     if request.method == "POST":
         return redirect(url_for(
@@ -135,6 +128,7 @@ def metasistema():
 # INTERPRETACION
 # --------------------------------------------------
 @app.route("/interpretacion", methods=["GET", "POST"])
+@app.route("/test/interpretacion", methods=["GET", "POST"])
 def interpretacion():
     if request.method == "POST":
         return redirect(url_for(
@@ -146,9 +140,10 @@ def interpretacion():
 
 
 # --------------------------------------------------
-# INFORME FINAL (v1.1 AUTOMÁTICO)
+# INFORME FINAL (v1.1 automático)
 # --------------------------------------------------
 @app.route("/informe")
+@app.route("/test/informe")
 def informe():
     fecha = datetime.now().strftime("%d-%m-%Y %H:%M")
 
