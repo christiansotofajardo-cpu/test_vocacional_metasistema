@@ -1,224 +1,99 @@
 from flask import Flask, render_template, request, redirect, url_for
-from datetime import datetime
-import sqlite3
 
 app = Flask(__name__)
-DB_PATH = "vocacional.db"
 
-
-# --------------------------------------------------
-# DB INIT
-# --------------------------------------------------
-def init_db():
-    conn = sqlite3.connect(DB_PATH)
-    c = conn.cursor()
-    c.execute("""
-        CREATE TABLE IF NOT EXISTS evaluaciones (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            fecha TEXT,
-            nombre TEXT,
-            apellido TEXT,
-            establecimiento TEXT,
-            curso TEXT,
-            riasec TEXT,
-            autoeficacia INTEGER,
-            motivacion TEXT,
-            habilidad TEXT,
-            proyeccion TEXT
-        )
-    """)
-    conn.commit()
-    conn.close()
-
-init_db()
-
-
-# --------------------------------------------------
+# -------------------------------
 # HOME
-# --------------------------------------------------
+# -------------------------------
 @app.route("/")
 def index():
     return render_template("index.html")
 
 
-# --------------------------------------------------
+# -------------------------------
 # REGISTRO
-# --------------------------------------------------
-@app.route("/registro", methods=["GET", "POST"])
+# -------------------------------
+@app.route("/registro")
 def registro():
-    if request.method == "POST":
-        return redirect(url_for(
-            "riasec",
-            nombre=request.form.get("nombre"),
-            apellido=request.form.get("apellido"),
-            establecimiento=request.form.get("establecimiento"),
-            curso=request.form.get("curso")
-        ))
     return render_template("registro.html")
 
 
-# --------------------------------------------------
-# RIASEC (ruta original + alias)
-# --------------------------------------------------
-@app.route("/riasec", methods=["GET", "POST"])
-@app.route("/test/riasec", methods=["GET", "POST"])
-def riasec():
-    if request.method == "POST":
-        return redirect(url_for(
-            "riasec_resultado",
-            **request.form
-        ))
-
-    return render_template("riasec.html", **request.args)
+# -------------------------------
+# TEST RIASEC (formulario)
+# -------------------------------
+@app.route("/test/riasec")
+def test_riasec():
+    return render_template("riasec.html")
 
 
-@app.route("/riasec_resultado", methods=["GET", "POST"])
-@app.route("/test/riasec_resultado", methods=["GET", "POST"])
+# -------------------------------
+# RESULTADO RIASEC (CÁLCULO REAL)
+# -------------------------------
+@app.route("/test/riasec_resultado")
 def riasec_resultado():
-    perfil_riasec = "Realista – Investigativo"
+    # 1. Inicializar puntajes
+    puntajes = {
+        "R": 0,
+        "I": 0,
+        "A": 0,
+        "S": 0,
+        "E": 0,
+        "C": 0
+    }
+
+    # 2. Leer respuestas desde la URL (?R1=2&R2=3...)
+    for key, value in request.args.items():
+        try:
+            letra = key[0].upper()   # R1 -> R
+            puntajes[letra] += int(value)
+        except:
+            continue
+
+    # 3. Ordenar de mayor a menor
+    ordenados = sorted(
+        puntajes.items(),
+        key=lambda x: x[1],
+        reverse=True
+    )
+
+    # 4. Enviar EXACTAMENTE lo que el template espera
     return render_template(
         "riasec_resultado.html",
-        perfil_riasec=perfil_riasec,
-        **request.args
+        ordenados=ordenados
     )
 
 
-# --------------------------------------------------
-# AUTOEFICACIA (ruta original + alias)
-# --------------------------------------------------
-@app.route("/autoefficacia", methods=["GET", "POST"])
-@app.route("/test/autoefficacia", methods=["GET", "POST"])
-def autoefficacia():
-    if request.method == "POST":
-        return redirect(url_for(
-            "autoefficacia_resultado",
-            **request.form
-        ))
-
-    return render_template("autoefficacia.html", **request.args)
+# -------------------------------
+# AUTOEFICACIA (placeholder)
+# -------------------------------
+@app.route("/test/autoeficacia")
+def autoeficacia():
+    return render_template("autoeficacia.html")
 
 
-@app.route("/autoefficacia_resultado", methods=["GET", "POST"])
-@app.route("/test/autoefficacia_resultado", methods=["GET", "POST"])
-def autoefficacia_resultado():
-    autoeficacia = 27
-    return render_template(
-        "autoefficacia_resultado.html",
-        autoeficacia=autoeficacia,
-        **request.args
-    )
+@app.route("/test/autoeficacia_resultado")
+def autoeficacia_resultado():
+    return render_template("autoeficacia_resultado.html")
 
 
-# --------------------------------------------------
-# METASISTEMA (ruta original + alias)
-# --------------------------------------------------
-@app.route("/metasistema", methods=["GET", "POST"])
-@app.route("/test/metasistema", methods=["GET", "POST"])
-def metasistema():
-    if request.method == "POST":
-        return redirect(url_for(
-            "interpretacion",
-            **request.form
-        ))
-
-    return render_template("metasistema.html", **request.args)
-
-
-# --------------------------------------------------
-# INTERPRETACION
-# --------------------------------------------------
-@app.route("/interpretacion", methods=["GET", "POST"])
-@app.route("/test/interpretacion", methods=["GET", "POST"])
-def interpretacion():
-    if request.method == "POST":
-        return redirect(url_for(
-            "informe",
-            **request.form
-        ))
-
-    return render_template("interpretacion.html", **request.args)
-
-
-# --------------------------------------------------
-# INFORME FINAL (v1.1 automático)
-# --------------------------------------------------
-@app.route("/informe")
-@app.route("/test/informe")
-def informe():
-    fecha = datetime.now().strftime("%d-%m-%Y %H:%M")
-
-    nombre = request.args.get("nombre")
-    apellido = request.args.get("apellido")
-    establecimiento = request.args.get("establecimiento")
-    curso = request.args.get("curso")
-
-    perfil_riasec = "Realista – Investigativo"
-    autoeficacia = 27
-    nivel_autoeficacia = "Bajo–Medio"
-
-    motivacion = request.args.get("motivacion", "Creación")
-    habilidad = request.args.get("habilidad", "Sociabilidad")
-    proyeccion = request.args.get("proyeccion", "Desarrollo de aplicaciones")
-
-    # Guardar en DB
-    conn = sqlite3.connect(DB_PATH)
-    c = conn.cursor()
-    c.execute("""
-        INSERT INTO evaluaciones
-        (fecha, nombre, apellido, establecimiento, curso,
-         riasec, autoeficacia, motivacion, habilidad, proyeccion)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    """, (
-        fecha, nombre, apellido, establecimiento, curso,
-        perfil_riasec, autoeficacia, motivacion, habilidad, proyeccion
-    ))
-    conn.commit()
-    conn.close()
-
-    return render_template(
-        "informe.html",
-        fecha=fecha,
-        nombre=nombre,
-        apellido=apellido,
-        establecimiento=establecimiento,
-        curso=curso,
-        perfil_riasec=perfil_riasec,
-        autoeficacia=autoeficacia,
-        nivel_autoeficacia=nivel_autoeficacia,
-        motivacion=motivacion,
-        habilidad=habilidad,
-        proyeccion=proyeccion
-    )
-
-
-# --------------------------------------------------
+# -------------------------------
 # CIERRE
-# --------------------------------------------------
+# -------------------------------
 @app.route("/cierre")
 def cierre():
     return render_template("cierre.html")
 
 
-# --------------------------------------------------
-# ADMIN
-# --------------------------------------------------
+# -------------------------------
+# ADMIN (si lo usas)
+# -------------------------------
 @app.route("/admin")
 def admin():
-    conn = sqlite3.connect(DB_PATH)
-    c = conn.cursor()
-    c.execute("""
-        SELECT fecha, nombre, apellido, establecimiento, curso, riasec, autoeficacia
-        FROM evaluaciones
-        ORDER BY id DESC
-    """)
-    rows = c.fetchall()
-    conn.close()
-
-    return render_template("admin.html", rows=rows)
+    return render_template("admin.html")
 
 
-# --------------------------------------------------
+# -------------------------------
 # RUN
-# --------------------------------------------------
+# -------------------------------
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000)
+    app.run(debug=True)
