@@ -48,23 +48,32 @@ def index():
 @app.route("/registro", methods=["GET", "POST"])
 def registro():
     if request.method == "POST":
-        data = {
-            "nombre": request.form.get("nombre"),
-            "apellido": request.form.get("apellido"),
-            "establecimiento": request.form.get("establecimiento"),
-            "curso": request.form.get("curso"),
-        }
-        return redirect(url_for("test", **data))
+        return redirect(url_for(
+            "riasec",
+            nombre=request.form.get("nombre"),
+            apellido=request.form.get("apellido"),
+            establecimiento=request.form.get("establecimiento"),
+            curso=request.form.get("curso")
+        ))
     return render_template("registro.html")
 
 
 # --------------------------------------------------
-# TEST (SIMULACIÓN CONTROLADA)
+# RIASEC
 # --------------------------------------------------
-@app.route("/test")
-def test():
+@app.route("/riasec", methods=["GET", "POST"])
+def riasec():
+    if request.method == "POST":
+        return redirect(url_for(
+            "riasec_resultado",
+            nombre=request.form.get("nombre"),
+            apellido=request.form.get("apellido"),
+            establecimiento=request.form.get("establecimiento"),
+            curso=request.form.get("curso")
+        ))
+
     return render_template(
-        "test.html",
+        "riasec.html",
         nombre=request.args.get("nombre"),
         apellido=request.args.get("apellido"),
         establecimiento=request.args.get("establecimiento"),
@@ -72,35 +81,97 @@ def test():
     )
 
 
-# --------------------------------------------------
-# RESULTADO + INFORME
-# --------------------------------------------------
-@app.route("/resultado", methods=["POST"])
-def resultado():
-    nombre = request.form.get("nombre")
-    apellido = request.form.get("apellido")
-    establecimiento = request.form.get("establecimiento")
-    curso = request.form.get("curso")
+@app.route("/riasec_resultado", methods=["GET", "POST"])
+def riasec_resultado():
+    perfil_riasec = "Realista – Investigativo"
 
-    # --- Resultados simulados (v1.0 defendible)
+    return render_template(
+        "riasec_resultado.html",
+        perfil_riasec=perfil_riasec,
+        **request.args
+    )
+
+
+# --------------------------------------------------
+# AUTOEFICACIA
+# --------------------------------------------------
+@app.route("/autoefficacia", methods=["GET", "POST"])
+def autoefficacia():
+    if request.method == "POST":
+        return redirect(url_for(
+            "autoefficacia_resultado",
+            **request.form
+        ))
+
+    return render_template("autoefficacia.html", **request.args)
+
+
+@app.route("/autoefficacia_resultado", methods=["GET", "POST"])
+def autoefficacia_resultado():
+    autoeficacia = 27
+
+    return render_template(
+        "autoefficacia_resultado.html",
+        autoeficacia=autoeficacia,
+        **request.args
+    )
+
+
+# --------------------------------------------------
+# METASISTEMA
+# --------------------------------------------------
+@app.route("/metasistema", methods=["GET", "POST"])
+def metasistema():
+    if request.method == "POST":
+        return redirect(url_for(
+            "interpretacion",
+            **request.form
+        ))
+
+    return render_template("metasistema.html", **request.args)
+
+
+# --------------------------------------------------
+# INTERPRETACION
+# --------------------------------------------------
+@app.route("/interpretacion", methods=["GET", "POST"])
+def interpretacion():
+    if request.method == "POST":
+        return redirect(url_for(
+            "informe",
+            **request.form
+        ))
+
+    return render_template("interpretacion.html", **request.args)
+
+
+# --------------------------------------------------
+# INFORME FINAL (v1.1 AUTOMÁTICO)
+# --------------------------------------------------
+@app.route("/informe")
+def informe():
+    fecha = datetime.now().strftime("%d-%m-%Y %H:%M")
+
+    nombre = request.args.get("nombre")
+    apellido = request.args.get("apellido")
+    establecimiento = request.args.get("establecimiento")
+    curso = request.args.get("curso")
+
     perfil_riasec = "Realista – Investigativo"
     autoeficacia = 27
     nivel_autoeficacia = "Bajo–Medio"
 
-    # --- MetaSistema (abierto)
-    motivacion = request.form.get("motivacion", "Creación")
-    habilidad = request.form.get("habilidad", "Sociabilidad")
-    proyeccion = request.form.get("proyeccion", "Desarrollo de aplicaciones")
+    motivacion = request.args.get("motivacion", "Creación")
+    habilidad = request.args.get("habilidad", "Sociabilidad")
+    proyeccion = request.args.get("proyeccion", "Desarrollo de aplicaciones")
 
-    fecha = datetime.now().strftime("%d-%m-%Y %H:%M")
-
-    # --- Guardar en DB
+    # Guardar en DB
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
     c.execute("""
         INSERT INTO evaluaciones
-        (fecha, nombre, apellido, establecimiento, curso, riasec,
-         autoeficacia, motivacion, habilidad, proyeccion)
+        (fecha, nombre, apellido, establecimiento, curso,
+         riasec, autoeficacia, motivacion, habilidad, proyeccion)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """, (
         fecha, nombre, apellido, establecimiento, curso,
@@ -109,7 +180,6 @@ def resultado():
     conn.commit()
     conn.close()
 
-    # --- Render informe automático v1.1
     return render_template(
         "informe.html",
         fecha=fecha,
@@ -124,6 +194,14 @@ def resultado():
         habilidad=habilidad,
         proyeccion=proyeccion
     )
+
+
+# --------------------------------------------------
+# CIERRE
+# --------------------------------------------------
+@app.route("/cierre")
+def cierre():
+    return render_template("cierre.html")
 
 
 # --------------------------------------------------
@@ -149,5 +227,3 @@ def admin():
 # --------------------------------------------------
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
-
-
