@@ -1,8 +1,8 @@
 services:
   - type: web
-    name: test-vocacional-metasistema
+    name: test_vocacional_metasistema
     env: python
     plan: free
-    runtime: python-3.11.9
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn main:app
+    pythonVersion: 3.11.9
