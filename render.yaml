@@ -3,6 +3,6 @@ services:
     name: test-vocacional-metasistema
     env: python
     plan: free
+    runtime: python-3.11.9
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn main:app
-    runtime: python-3.11.9
